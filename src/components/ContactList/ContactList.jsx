@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import styles from './ContactList.module.css';
 import { connect } from 'react-redux';
-import contactsActions from '../../redux/contacts/contacts-actions';
+// import contactsOperations from '../../redux/contacts/contacts-operations';
+// import contactsSelectors from '../../redux/contacts/contacts-selectors';
+import { contactsOperations, contactsSelectors } from '../../redux/contacts';
 const ContactItem = ({ id, name, number, onRemove }) => {
   return (
     <li className={styles.listItem} key={id}>
@@ -58,18 +60,19 @@ const ContactList = ({ contacts, onRemove }) => {
 // const mapStateToProps = ({ contacts: { items, filter } }) => ({
 //   contacts: getVisibleContacts(items, filter),
 // });
-const mapStateToProps = state => {
-  const { items, filter } = state.contacts;
+const mapStateToProps = state => ({
+  contacts: contactsSelectors.getVisibleContacts(state),
 
   // const visibleContacts = items.filter(({ name }) =>
   //   name.toLowerCase.includes(filter.toLowerCase()),
   // );
-  return {
-    contacts: items.filter(({ name }) => name.includes(filter.toLowerCase())),
-  };
-};
+  // const { items, filter } = state.contacts;
+  // return {
+  //   contacts: items.filter(({ name }) => name.includes(filter.toLowerCase())),
+  // };
+});
 
 const mapDispatchToProps = dispatch => ({
-  onRemove: id => dispatch(contactsActions.contactRemove(id)),
+  onRemove: id => dispatch(contactsOperations.contactRemove(id)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ContactList);
